@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 st.set_page_config(page_title="תחזית מסחר חכמה", layout="centered")
-st.title("📈 תחזית מסחר חכמה")
+st.title("תחזית מסחר חכמה")
 st.write("בחר נכס, קבל המלצה בזמן אמת.")
 
 assets = {
@@ -29,17 +29,17 @@ else:
     sma_50 = df["SMA_50"].iloc[-1]
 
     if sma_20 > sma_50:
-        signal = "📈 המלצה: קנייה (BUY)"
+        signal = "המלצה: קנייה (BUY)"
         confidence = "רמת ביטחון: גבוהה"
     elif sma_20 < sma_50:
-        signal = "📉 המלצה: מכירה (SELL)"
+        signal = "המלצה: מכירה (SELL)"
         confidence = "רמת ביטחון: גבוהה"
     else:
-        signal = "⏸ המלצה: להמתין"
+        signal = "המלצה: להמתין"
         confidence = "רמת ביטחון: בינונית"
 
     st.subheader(f"נכס: {asset_name}")
-    st.write("💰 מחיר נוכחי:")
+    st.write("מחיר נוכחי:")
     st.metric(label="", value=f"{last_price:.2f}")
     st.write(signal)
     st.write(confidence)
