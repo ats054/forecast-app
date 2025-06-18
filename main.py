@@ -10,7 +10,7 @@ st.write("בחר נכס, קבל המלצה בזמן אמת.")
 assets = {
     "ביטקוין (BTC)": "BTC-USD",
     "זהב (Gold)": "GC=F",
-    "נאסד\"ק": "^IXIC"  # הגרש תוקן כאן
+    "נאסד\"ק": "^IXIC"
 }
 
 asset_name = st.selectbox("בחר נכס:", list(assets.keys()))
@@ -39,7 +39,8 @@ else:
         confidence = "רמת ביטחון: בינונית"
 
     st.subheader(f"נכס: {asset_name}")
-    st.metric(label="מחיר נוכחי", value=f"{last_price:.2f}")
+    st.write("💰 מחיר נוכחי:")
+    st.metric(label="", value=f"{last_price:.2f}")
     st.write(signal)
     st.write(confidence)
 
