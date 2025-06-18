@@ -18,14 +18,14 @@ ticker = assets[asset_name]
 
 df = yf.download(ticker, period="7d", interval="30m")
 
-if df.empty:
+if df.empty or df["Close"].dropna().empty:
     st.error("לא נמצאו נתונים.")
 else:
     df = df.dropna(subset=["Close"])
     df["SMA_20"] = df["Close"].rolling(window=20).mean()
     df["SMA_50"] = df["Close"].rolling(window=50).mean()
 
-    if not df.empty:
+    try:
         last_price = df["Close"].iloc[-1]
         sma_20 = df["SMA_20"].iloc[-1]
         sma_50 = df["SMA_50"].iloc[-1]
@@ -42,10 +42,14 @@ else:
 
         st.subheader(f"נכס: {asset_name}")
         st.write("מחיר נוכחי:")
-        st.metric(label="", value=f"{last_price:.2f}")
+        if not np.isnan(last_price):
+            st.metric(label="", value=f"{last_price:.2f}")
+        else:
+            st.write("המחיר לא זמין")
         st.write(signal)
         st.write(confidence)
 
         st.line_chart(df[["Close", "SMA_20", "SMA_50"]].dropna())
-    else:
-        st.warning("אין מספיק נתונים לתצוגה.")
+
+    except Exception as e:
+        st.error(f"שגיאה במהלך החישוב: {e}")
