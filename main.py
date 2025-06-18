@@ -1,4 +1,3 @@
-
 import streamlit as st
 import yfinance as yf
 import pandas as pd
@@ -11,7 +10,7 @@ st.write("בחר נכס, קבל המלצה בזמן אמת.")
 assets = {
     "ביטקוין (BTC)": "BTC-USD",
     "זהב (Gold)": "GC=F",
-    "נאסד"ק": "^IXIC"
+    "נאסד\"ק": "^IXIC"  # הגרש תוקן כאן
 }
 
 asset_name = st.selectbox("בחר נכס:", list(assets.keys()))
@@ -40,7 +39,7 @@ else:
         confidence = "רמת ביטחון: בינונית"
 
     st.subheader(f"נכס: {asset_name}")
-    st.metric("מחיר נוכחי", f"{last_price:.2f}")
+    st.metric(label="מחיר נוכחי", value=f"{last_price:.2f}")
     st.write(signal)
     st.write(confidence)
 
