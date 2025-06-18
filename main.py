@@ -40,7 +40,13 @@ else:
 
     st.subheader(f"נכס: {asset_name}")
     st.write("מחיר נוכחי:")
-    st.metric(label="", value=f"{last_price:.2f}")
+    
+    # כאן התיקון האמיתי - אם המחיר תקין, נציג אותו, אחרת נכתוב הודעה
+    if pd.notna(last_price):
+        st.metric(label="", value=f"{last_price:.2f}")
+    else:
+        st.write("⚠️ המחיר הנוכחי לא זמין")
+
     st.write(signal)
     st.write(confidence)
 
