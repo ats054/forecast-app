@@ -21,33 +21,31 @@ df = yf.download(ticker, period="7d", interval="30m")
 if df.empty:
     st.error("לא נמצאו נתונים.")
 else:
+    df = df.dropna(subset=["Close"])
     df["SMA_20"] = df["Close"].rolling(window=20).mean()
     df["SMA_50"] = df["Close"].rolling(window=50).mean()
 
-    last_price = df["Close"].iloc[-1]
-    sma_20 = df["SMA_20"].iloc[-1]
-    sma_50 = df["SMA_50"].iloc[-1]
+    if not df.empty:
+        last_price = df["Close"].iloc[-1]
+        sma_20 = df["SMA_20"].iloc[-1]
+        sma_50 = df["SMA_50"].iloc[-1]
 
-    if sma_20 > sma_50:
-        signal = "המלצה: קנייה (BUY)"
-        confidence = "רמת ביטחון: גבוהה"
-    elif sma_20 < sma_50:
-        signal = "המלצה: מכירה (SELL)"
-        confidence = "רמת ביטחון: גבוהה"
-    else:
-        signal = "המלצה: להמתין"
-        confidence = "רמת ביטחון: בינונית"
+        if sma_20 > sma_50:
+            signal = "המלצה: קנייה (BUY)"
+            confidence = "רמת ביטחון: גבוהה"
+        elif sma_20 < sma_50:
+            signal = "המלצה: מכירה (SELL)"
+            confidence = "רמת ביטחון: גבוהה"
+        else:
+            signal = "המלצה: להמתין"
+            confidence = "רמת ביטחון: בינונית"
 
-    st.subheader(f"נכס: {asset_name}")
-    st.write("מחיר נוכחי:")
-    
-    # כאן התיקון האמיתי - אם המחיר תקין, נציג אותו, אחרת נכתוב הודעה
-    if pd.notna(last_price):
+        st.subheader(f"נכס: {asset_name}")
+        st.write("מחיר נוכחי:")
         st.metric(label="", value=f"{last_price:.2f}")
+        st.write(signal)
+        st.write(confidence)
+
+        st.line_chart(df[["Close", "SMA_20", "SMA_50"]].dropna())
     else:
-        st.write("⚠️ המחיר הנוכחי לא זמין")
-
-    st.write(signal)
-    st.write(confidence)
-
-    st.line_chart(df[["Close", "SMA_20", "SMA_50"]].dropna())
+        st.warning("אין מספיק נתונים לתצוגה.")
